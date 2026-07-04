@@ -37,7 +37,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_BACK_WEBHOOK }}
           status: ${{ job.status }}
-          title: 'Success: ✅ 성공 ✅'
+          title: '✅ 성공 ✅'
           description: '서버 배포 성공 '
           color: 65280
           username: 'FEESH-BACK-bot'
@@ -48,7 +48,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_BACK_WEBHOOK }}
           status: ${{ job.status }}
-          title: 'Failure: ❗️ 실패 ❗️'
+          title: '❗️ 실패 ❗️'
           description: '서버 배포 실패'
           color: 16711680
           username: 'FEESH-BACK-bot'
