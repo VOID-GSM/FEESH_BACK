@@ -33,25 +33,49 @@ jobs:
       - name: Build
         run: ./gradlew build -x test
 
-      - name: FEESH_BACK CI Discord Notification (success)
+      - name: FEESH_BACK CI Discord Notification - DevOps (success)
         if: ${{ success() }}
         uses: sarisia/actions-status-discord@v1
         with:
-          webhook: ${{ secrets.DISCORD }}
+          webhook: ${{ secrets.DISCORD_DEVEOPS_WEBHOOK }}
           status: ${{ job.status }}
-          title: '서버 배포'
+          title: '서버 빌드'
           description: 'Spring Boot 빌드 성공'
           content: 'Success: ✅ 성공 ✅'
           color: 65280
           username: 'FEESH-BACK-bot'
 
-      - name: FEESH_BACK CI Discord Notification (failure)
+      - name: FEESH_BACK CI Discord Notification - Backend (success)
+        if: ${{ success() }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BACK_WEBHOOK }}
+          status: ${{ job.status }}
+          title: '서버 빌드'
+          description: 'Spring Boot 빌드 성공'
+          content: 'Success: ✅ 성공 ✅'
+          color: 65280
+          username: 'FEESH-BACK-bot'
+
+      - name: FEESH_BACK CI Discord Notification - DevOps (failure)
         if: ${{ failure() }}
         uses: sarisia/actions-status-discord@v1
         with:
-          webhook: ${{ secrets.DISCORD }}
+          webhook: ${{ secrets.DISCORD_DEVEOPS_WEBHOOK }}
           status: ${{ job.status }}
-          title: '서버 배포'
+          title: '서버 빌드'
+          description: 'Spring Boot 빌드 실패'
+          content: 'Failure: ❗️ 실패 ❗️'
+          color: 16711680
+          username: 'FEESH-BACK-bot'
+
+      - name: FEESH_BACK CI Discord Notification - Backend (failure)
+        if: ${{ failure() }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BACK_WEBHOOK }}
+          status: ${{ job.status }}
+          title: '서버 빌드'
           description: 'Spring Boot 빌드 실패'
           content: 'Failure: ❗️ 실패 ❗️'
           color: 16711680
