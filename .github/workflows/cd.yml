@@ -31,21 +31,7 @@ jobs:
       - name: Build
         run: ./gradlew build -x test
 
-      # 💡 도커 빌드/배포 스크립트는 여기에 추가
-
-      - name: FEESH_BACK CD Discord Notification - DevOps (success)
-        if: ${{ success() }}
-        uses: sarisia/actions-status-discord@v1
-        with:
-          webhook: ${{ secrets.DISCORD_DEVEOPS_WEBHOOK }}
-          status: ${{ job.status }}
-          title: '서버 배포'
-          description: '서버 배포 성공'
-          content: 'Success: ✅ 성공 ✅'
-          color: 65280
-          username: 'FEESH-BACK-bot'
-
-      - name: FEESH_BACK CD Discord Notification - Backend (success)
+      - name: FEESH_BACK CD Discord Notification (success)
         if: ${{ success() }}
         uses: sarisia/actions-status-discord@v1
         with:
@@ -57,19 +43,7 @@ jobs:
           color: 65280
           username: 'FEESH-BACK-bot'
 
-      - name: FEESH_BACK CD Discord Notification - DevOps (failure)
-        if: ${{ failure() }}
-        uses: sarisia/actions-status-discord@v1
-        with:
-          webhook: ${{ secrets.DISCORD_DEVEOPS_WEBHOOK }}
-          status: ${{ job.status }}
-          title: '서버 배포'
-          description: '서버 배포 실패'
-          content: 'Failure: ❗️ 실패 ❗️'
-          color: 16711680
-          username: 'FEESH-BACK-bot'
-
-      - name: FEESH_BACK CD Discord Notification - Backend (failure)
+      - name: FEESH_BACK CD Discord Notification (failure)
         if: ${{ failure() }}
         uses: sarisia/actions-status-discord@v1
         with:
