@@ -1,0 +1,56 @@
+name: Spring Boot CI
+
+on:
+  push:
+    branches: ['main', 'develop']
+  pull_request:
+    branches: ['**']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: JDK 21 설정
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Gradle 설정
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Gradle 실행 권한 부여
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew build -x test
+
+      - name: FEESH_BACK CI Discord Notification (success)
+        if: ${{ success() }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BACK_WEBHOOK }}
+          status: ${{ job.status }}
+          title: '✅ 성공 ✅'
+          description: 'Spring Boot 빌드 성공'
+          color: 65280
+          username: 'FEESH-BACK-bot'
+
+      - name: FEESH_BACK CI Discord Notification (failure)
+        if: ${{ failure() }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_BACK_WEBHOOK }}
+          status: ${{ job.status }}
+          title: '❗️ 실패 ❗️'
+          description: 'Spring Boot 빌드 실패'
+          color: 16711680
+          username: 'FEESH-BACK-bot'
