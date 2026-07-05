@@ -51,4 +51,4 @@ jobs:
           title: '❗️ 실패 ❗️'
           description: '서버 배포 실패'
           color: 16711680
-          username: 'FEESH-BACK-bot'
+          username: 'FEESH-BACK-bot' 
