@@ -1,5 +1,6 @@
 package com.feesh.post.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import com.feesh.post.dto.PostRequest;
 import com.feesh.post.entity.Post;
 import com.feesh.post.repository.PostRepository;
@@ -28,6 +29,8 @@ public class PostService {
 
         postRepository.save(post);
     }
+
+    @Transactional
     public void updatePost(Long postId, PostRequest request) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
