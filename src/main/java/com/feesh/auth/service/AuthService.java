@@ -5,6 +5,7 @@ import com.feesh.auth.dto.CheckEmailResponse;
 import com.feesh.auth.dto.LoginRequest;
 import com.feesh.auth.dto.LoginResponse;
 import com.feesh.auth.dto.SignupRequest;
+import com.feesh.auth.dto.SignupResponse;
 import com.feesh.global.exception.CustomException;
 import com.feesh.global.exception.ErrorCode;
 import com.feesh.user.entity.User;
@@ -20,9 +21,12 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signup(SignupRequest request) {
+    public SignupResponse signup(SignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new CustomException(ErrorCode.EMAIL_DUPLICATE);
+        }
+        if (userRepository.existsByNickname(request.getNickname())) {
+            throw new CustomException(ErrorCode.NICKNAME_DUPLICATE);
         }
 
         User user = User.builder()
@@ -32,6 +36,11 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
+        return new SignupResponse(
+                "회원가입 성공",
+                user.getEmail(),
+                user.getNickname()
+        );
     }
 
     public LoginResponse login(LoginRequest request) {

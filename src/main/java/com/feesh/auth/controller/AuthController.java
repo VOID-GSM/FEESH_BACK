@@ -1,6 +1,7 @@
 package com.feesh.auth.controller;
 
 import com.feesh.auth.dto.SignupRequest;
+import com.feesh.auth.dto.SignupResponse;
 import com.feesh.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public String signup(@Valid @RequestBody SignupRequest request) {
-        authService.signup(request);
-        return "회원가입 성공";
+    public SignupResponse signup(@Valid @RequestBody SignupRequest request) {
+        return authService.signup(request);
     }
 
     @PostMapping("/login")
