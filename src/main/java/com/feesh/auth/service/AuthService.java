@@ -5,9 +5,12 @@ import com.feesh.auth.dto.CheckEmailResponse;
 import com.feesh.auth.dto.LoginRequest;
 import com.feesh.auth.dto.LoginResponse;
 import com.feesh.auth.dto.SignupRequest;
+import com.feesh.global.exception.CustomException;
+import com.feesh.global.exception.ErrorCode;
 import com.feesh.user.entity.User;
 import com.feesh.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,15 +18,16 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void signup(SignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+            throw new CustomException(ErrorCode.EMAIL_DUPLICATE);
         }
 
         User user = User.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .nickname(request.getNickname())
                 .build();
 
@@ -32,10 +36,10 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("이메일 또는 비밀번호가 일치하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAILED));
 
-        if (!user.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("이메일 또는 비밀번호가 일치하지 않습니다.");
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
         return new LoginResponse(
