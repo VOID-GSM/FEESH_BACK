@@ -36,26 +36,17 @@ public class JwtTokenProvider {
 
     }
 
-    public Long getUserId(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-
-        return Long.valueOf(claims.getSubject());
-    }
-
-    public boolean validateToken(String token) {
+    public Long getUserIdIfValid(String token) {
         try {
-            Jwts.parser()
+            Claims claims = Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
-                    .parseSignedClaims(token);
+                    .parseSignedClaims(token)
+                    .getPayload();
 
-            return true;
+            return Long.valueOf(claims.getSubject());
         } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 }
