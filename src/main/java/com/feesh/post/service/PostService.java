@@ -8,7 +8,6 @@ import com.feesh.post.repository.PostRepository;
 import com.feesh.user.entity.User;
 import com.feesh.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +18,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public void createPost(PostRequest request) {
-        Long userId = (Long) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
+    public void createPost(Long userId, PostRequest request) {
         User author = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
