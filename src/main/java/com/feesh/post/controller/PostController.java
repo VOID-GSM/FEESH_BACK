@@ -4,6 +4,7 @@ import com.feesh.post.dto.PostRequest;
 import com.feesh.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,8 +15,11 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public String createPost(@Valid @RequestBody PostRequest request) {
-        postService.createPost(request);
+    public String createPost(
+            @AuthenticationPrincipal Long userId,
+            @Valid @RequestBody PostRequest request
+    ) {
+        postService.createPost(userId, request);
         return "게시글 작성 성공";
     }
 
