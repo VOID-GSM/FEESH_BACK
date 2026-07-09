@@ -10,9 +10,11 @@ import com.feesh.global.exception.CustomException;
 import com.feesh.global.exception.ErrorCode;
 import com.feesh.user.entity.User;
 import com.feesh.user.repository.UserRepository;
+import com.feesh.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public SignupResponse signup(SignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -50,9 +53,12 @@ public class AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
+        String accessToken = jwtTokenProvider.createToken(user.getId());
+
 
         return new LoginResponse(
                 "로그인 성공",
+                accessToken,
                 user.getEmail(),
                 user.getNickname()
         );
