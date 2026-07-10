@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/main")
@@ -20,12 +21,13 @@ public class MainController {
     private final MainService mainService;
 
     @GetMapping("/posts")
-    public PostListReponse getPosts(@PageableDefault Pageable pageable) {
+    public PostListReponse getPosts(
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return mainService.getPosts(pageable);
     }
 
     @GetMapping("/posts/latest")
-    public PostListReponse getPostsLat(@PageableDefault Pageable pageable) {
+    public PostListReponse getLatestPosts(@PageableDefault Pageable pageable) {
         return mainService.getLatestPosts(pageable);
     }
 

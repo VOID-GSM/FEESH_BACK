@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import com.feesh.post.entity.Post;
 import com.feesh.post.entity.Category;
 import java.util.Arrays;
-
 import java.util.List;
 
 @Service
@@ -24,52 +23,17 @@ public class MainService {
 
     public PostListReponse getPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAll(pageable);
-
-        List<PostSummaryResponse> summaries = posts.getContent().stream()
-                .map(post -> PostSummaryResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .build())
-                .toList();
-
-        return PostListReponse.builder()
-                .posts(summaries)
-                .totalPages(posts.getTotalPages())
-                .totalElements(posts.getTotalElements())
-                .build();
+        return toPostListResponse(posts);
     }
 
     public PostListReponse getLatestPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-
-        List<PostSummaryResponse> summaries = posts.getContent().stream()
-                .map(post -> PostSummaryResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .build())
-                .toList();
-
-        return PostListReponse.builder()
-                .posts(summaries)
-                .totalPages(posts.getTotalPages())
-                .totalElements(posts.getTotalElements())
-                .build();
+        return toPostListResponse(posts);
     }
 
     public PostListReponse getPopularPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAllByOrderByLikeCountDesc(pageable);
-
-        List<PostSummaryResponse> summaries = posts.getContent().stream()
-                .map(post -> PostSummaryResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .build())
-                .toList();
-        return PostListReponse.builder()
-                .posts(summaries)
-                .totalPages(posts.getTotalPages())
-                .totalElements(posts.getTotalElements())
-                .build();
+        return toPostListResponse(posts);
     }
 
     public List<CategoryResponse> getCategories() {
@@ -92,6 +56,21 @@ public class MainService {
                 .toList();
 
         return PostSearchResponse.builder()
+                .posts(summaries)
+                .totalPages(posts.getTotalPages())
+                .totalElements(posts.getTotalElements())
+                .build();
+    }
+
+    private PostListReponse toPostListResponse(Page<Post> posts) {
+        List<PostSummaryResponse> summaries = posts.getContent().stream()
+                .map(post -> PostSummaryResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .build())
+                .toList();
+
+        return PostListReponse.builder()
                 .posts(summaries)
                 .totalPages(posts.getTotalPages())
                 .totalElements(posts.getTotalElements())
