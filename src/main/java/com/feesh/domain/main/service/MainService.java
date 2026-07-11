@@ -1,17 +1,17 @@
-package com.feesh.main.service;
+package com.feesh.domain.main.service;
 
-import com.feesh.main.dto.CategoryResponse;
-import com.feesh.main.dto.PostListReponse;
-import com.feesh.main.dto.PostSearchResponse;
-import com.feesh.main.dto.PostSummaryResponse;
-import com.feesh.post.repository.PostRepository;
+import com.feesh.domain.main.dto.CategoryResponse;
+import com.feesh.domain.main.dto.PostListReponse;
+import com.feesh.domain.main.dto.PostSearchResponse;
+import com.feesh.domain.main.dto.PostSummaryResponse;
+import com.feesh.domain.post.entity.Category;
+import com.feesh.domain.post.entity.Post;
+import com.feesh.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
-import com.feesh.post.entity.Post;
-import com.feesh.post.entity.Category;
 import java.util.Arrays;
 import java.util.List;
 

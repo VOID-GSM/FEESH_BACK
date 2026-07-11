@@ -1,4 +1,4 @@
-package com.feesh.main.dto;
+package com.feesh.domain.main.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

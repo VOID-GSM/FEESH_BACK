@@ -1,9 +1,9 @@
-package com.feesh.main.controller;
+package com.feesh.domain.main.controller;
 
-import com.feesh.main.dto.CategoryResponse;
-import com.feesh.main.dto.PostListReponse;
-import com.feesh.main.dto.PostSearchResponse;
-import com.feesh.main.service.MainService;
+import com.feesh.domain.main.dto.CategoryResponse;
+import com.feesh.domain.main.dto.PostListReponse;
+import com.feesh.domain.main.dto.PostSearchResponse;
+import com.feesh.domain.main.service.MainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Pageable;
