@@ -1,6 +1,6 @@
 package com.feesh.domain.mypage.controller;
 
-import com.feesh.domain.mypage.dto.MyComentResponse;
+import com.feesh.domain.mypage.dto.MyCommentResponse;
 import com.feesh.domain.mypage.dto.MyFeedResponse;
 import com.feesh.domain.mypage.service.MyPageService;
 import lombok.RequiredArgsConstructor;
