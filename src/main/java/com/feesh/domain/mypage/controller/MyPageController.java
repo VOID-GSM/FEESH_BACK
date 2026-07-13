@@ -35,8 +35,8 @@ public class MyPageController {
         return myPageService.getMyFeed(userId, pageable);
     }
 
-    @GetMapping("/coment")
-    public Page<MyComentResponse> getMyComments(
+    @GetMapping("/comments")
+    public Page<MyCommentResponse> getMyComments(
             @AuthenticationPrincipal Long userId,
             @PageableDefault(size = 10) Pageable pageable
     ) {

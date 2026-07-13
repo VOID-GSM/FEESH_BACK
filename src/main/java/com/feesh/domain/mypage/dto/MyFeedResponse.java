@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 public class MyFeedResponse {
     private Long postId;
     private String title;
-    private String thumbnaiUrl;
     private int likeCount;
-    private int commentCount;
     private LocalDateTime createdAt;
 }

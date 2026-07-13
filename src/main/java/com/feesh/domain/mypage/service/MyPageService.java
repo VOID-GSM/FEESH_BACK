@@ -1,6 +1,6 @@
 package com.feesh.domain.mypage.service;
 
-import com.feesh.domain.mypage.dto.MyComentResponse;
+import com.feesh.domain.mypage.dto.MyCommentResponse;
 import com.feesh.domain.mypage.dto.MyFeedResponse;
 import com.feesh.domain.post.repository.PostRepository;
 import com.feesh.domain.post.repository.CommentRepository;
@@ -36,9 +36,9 @@ public class MyPageService {
                         .build());
     }
 
-    public Page<MyComentResponse> getMyComments(Long userId, Pageable pageable) {
+    public Page<MyCommentResponse> getMyComments(Long userId, Pageable pageable) {
         return commentRepository.findByAuthorId(userId, pageable)
-                .map(comment -> MyComentResponse.builder()
+                .map(comment -> MyCommentResponse.builder()
                         .commentId(comment.getId())
                         .postId(comment.getPost().getId())
                         .comment(comment.getContent())
@@ -48,10 +48,24 @@ public class MyPageService {
 
     @Transactional
     public void updateProfileImage(Long userId, MultipartFile image) {
+        if (image == null || image.isEmpty()) {
+            throw new IllegalArgumentException("업로드할 이미지 파일이 비어있습니다.");
+        }
+
+        String contentType = image.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("이미지 파일만 업로드할 수 있습니다.");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
-        String storedFileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+        String originalFilename = image.getOriginalFilename();
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+        String storedFileName = UUID.randomUUID() + extension;
         String uploadDir = "uploads/profile/";
 
         try {
@@ -67,8 +81,6 @@ public class MyPageService {
         user.updateProfileImage("/uploads/profile/" + storedFileName);
     }
 
-    @Transactional
     public void logout() {
-
     }
 }
