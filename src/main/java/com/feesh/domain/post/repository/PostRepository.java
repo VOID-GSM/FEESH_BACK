@@ -7,4 +7,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
     Page<Post> findAllByOrderByLikeCountDesc(Pageable pageable);
     Page<Post> findByTitleContaining(String keyword, Pageable pageable);
+    Page<Post> findByAuthorId(Long authorId, Pageable pageable);
 }
