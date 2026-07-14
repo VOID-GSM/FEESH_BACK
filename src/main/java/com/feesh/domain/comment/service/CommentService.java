@@ -78,10 +78,9 @@ public class CommentService {
                 .findByParent_IdAndIsDeletedFalseOrderByCreatedAtAsc(parentId);
 
         List<CommentResponse> result = new ArrayList<>();
-        for (Comment reply : replies) {
-            result.add(new CommentResponse(reply));
-        }
-        return result;
+        return replies.stream()
+                .map(CommentResponse::new)
+                .toList();
     }
 
     // 댓글/답글 삭제
