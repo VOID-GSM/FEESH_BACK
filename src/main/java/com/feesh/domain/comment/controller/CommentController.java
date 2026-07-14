@@ -53,7 +53,6 @@ public class CommentController {
     }
 
     // 답글 조회
-    @Transactional(readOnly = true) //메서드 실행 시작부터 끝날 때까지 DB 연결(세션)을 계속 열어두는 역할
     @GetMapping("/comments/{commentId}/replies")
     public List<CommentResponse> getReplies(@PathVariable Long commentId) {
         return commentService.getReplies(commentId);
