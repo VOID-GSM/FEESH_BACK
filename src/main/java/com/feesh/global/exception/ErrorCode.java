@@ -6,6 +6,12 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
+    //Comment 관련!
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
+    COMMENT_ACCESS_DENIED(HttpStatus.FORBIDDEN, "본인의 댓글만 삭제할 수 있습니다."),
+    PARENT_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
+    INVALID_REPLY_TARGET(HttpStatus.BAD_REQUEST, "답글을 두번 작성할 수 없습니다."),
+
     // User 관련
     EMAIL_DUPLICATE(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
     NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다."),
@@ -26,4 +32,5 @@ public enum ErrorCode {
         this.status = status;
         this.message = message;
     }
+
 }
