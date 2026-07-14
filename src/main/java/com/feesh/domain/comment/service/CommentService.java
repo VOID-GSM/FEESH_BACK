@@ -44,7 +44,9 @@ public class CommentService {
     public CommentResponse createReply(Long parentId, Long userId, CommentRequest request) {
         Comment parent = commentRepository.findById(parentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PARENT_COMMENT_NOT_FOUND));
-
+        if (parent.isDeleted()) {
+            throw new CustomException(ErrorCode.PARENT_COMMENT_NOT_FOUND);
+        }
         if (parent.isReply()) {
             throw new CustomException(ErrorCode.INVALID_REPLY_TARGET);
         }
@@ -77,7 +79,6 @@ public class CommentService {
         List<Comment> replies = commentRepository
                 .findByParent_IdAndIsDeletedFalseOrderByCreatedAtAsc(parentId);
 
-        List<CommentResponse> result = new ArrayList<>();
         return replies.stream()
                 .map(CommentResponse::new)
                 .toList();
