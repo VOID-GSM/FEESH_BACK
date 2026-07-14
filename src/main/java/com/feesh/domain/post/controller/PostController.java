@@ -1,6 +1,6 @@
 package com.feesh.domain.post.controller;
 
-import com.feesh.domain.post.dto.PostRequest;
+import com.feesh.domain.post.dto.request.PostRequest;
 import com.feesh.domain.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

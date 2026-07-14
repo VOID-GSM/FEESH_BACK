@@ -2,7 +2,7 @@ package com.feesh.domain.post.service;
 
 import com.feesh.global.exception.CustomException;
 import com.feesh.global.exception.ErrorCode;
-import com.feesh.domain.post.dto.PostRequest;
+import com.feesh.domain.post.dto.request.PostRequest;
 import com.feesh.domain.post.entity.Post;
 import com.feesh.domain.post.repository.PostRepository;
 import com.feesh.domain.user.entity.User;

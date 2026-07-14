@@ -1,15 +1,15 @@
 package com.feesh.domain.auth.controller;
 
-import com.feesh.domain.auth.dto.SignupRequest;
-import com.feesh.domain.auth.dto.SignupResponse;
+import com.feesh.domain.auth.dto.request.CheckEmailRequest;
+import com.feesh.domain.auth.dto.request.LoginRequest;
+import com.feesh.domain.auth.dto.request.SignupRequest;
+import com.feesh.domain.auth.dto.response.CheckEmailResponse;
+import com.feesh.domain.auth.dto.response.LoginResponse;
+import com.feesh.domain.auth.dto.response.SignupResponse;
 import com.feesh.domain.auth.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.feesh.domain.auth.dto.LoginRequest;
-import com.feesh.domain.auth.dto.LoginResponse;
-import com.feesh.domain.auth.dto.CheckEmailRequest;
-import com.feesh.domain.auth.dto.CheckEmailResponse;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")

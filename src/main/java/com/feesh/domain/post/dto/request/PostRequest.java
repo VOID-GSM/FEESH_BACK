@@ -1,4 +1,4 @@
-package com.feesh.domain.post.dto;
+package com.feesh.domain.post.dto.request;
 
 import com.feesh.domain.post.entity.Category;
 import jakarta.validation.constraints.NotBlank;

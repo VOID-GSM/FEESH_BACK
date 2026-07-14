@@ -37,4 +37,11 @@ public class User {
     public void updateProfile(String nickname) {
         this.nickname = nickname;
     }
+
+    @Column
+    private String profileImageUrl;
+
+    public void updateProfileImage(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 }
