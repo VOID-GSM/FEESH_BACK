@@ -1,4 +1,4 @@
-package com.feesh.domain.comment.dto;
+package com.feesh.domain.comment.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
