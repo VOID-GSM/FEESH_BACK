@@ -1,20 +1,19 @@
 package com.feesh.domain.auth.service;
 
 import com.feesh.domain.auth.dto.request.CheckEmailRequest;
-import com.feesh.domain.auth.dto.response.CheckEmailResponse;
 import com.feesh.domain.auth.dto.request.LoginRequest;
-import com.feesh.domain.auth.dto.response.LoginResponse;
 import com.feesh.domain.auth.dto.request.SignupRequest;
+import com.feesh.domain.auth.dto.response.CheckEmailResponse;
+import com.feesh.domain.auth.dto.response.LoginResponse;
 import com.feesh.domain.auth.dto.response.SignupResponse;
-import com.feesh.global.exception.CustomException;
-import com.feesh.global.exception.ErrorCode;
 import com.feesh.domain.user.entity.User;
 import com.feesh.domain.user.repository.UserRepository;
+import com.feesh.global.exception.CustomException;
+import com.feesh.global.exception.ErrorCode;
 import com.feesh.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +27,7 @@ public class AuthService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new CustomException(ErrorCode.EMAIL_DUPLICATE);
         }
+
         if (userRepository.existsByNickname(request.getNickname())) {
             throw new CustomException(ErrorCode.NICKNAME_DUPLICATE);
         }
@@ -39,6 +39,7 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
+
         return new SignupResponse(
                 "회원가입 성공",
                 user.getEmail(),
@@ -53,8 +54,8 @@ public class AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
-        String accessToken = jwtTokenProvider.createToken(user.getId());
 
+        String accessToken = jwtTokenProvider.createToken(user.getId());
 
         return new LoginResponse(
                 "로그인 성공",
