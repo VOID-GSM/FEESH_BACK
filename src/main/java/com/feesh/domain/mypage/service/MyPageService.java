@@ -3,7 +3,7 @@ package com.feesh.domain.mypage.service;
 import com.feesh.domain.mypage.dto.MyCommentResponse;
 import com.feesh.domain.mypage.dto.MyFeedResponse;
 import com.feesh.domain.post.repository.PostRepository;
-import com.feesh.domain.post.repository.CommentRepository;
+import com.feesh.domain.comment.repository.CommentRepository;
 import com.feesh.domain.user.repository.UserRepository;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +37,7 @@ public class MyPageService {
     }
 
     public Page<MyCommentResponse> getMyComments(Long userId, Pageable pageable) {
-        return commentRepository.findByAuthorId(userId, pageable)
+        return commentRepository.findByAuthor_IdAndIsDeletedFalse(userId, pageable)
                 .map(comment -> MyCommentResponse.builder()
                         .commentId(comment.getId())
                         .postId(comment.getPost().getId())
