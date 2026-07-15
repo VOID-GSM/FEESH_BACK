@@ -37,7 +37,7 @@ public class MyPageService {
     }
 
     public Page<MyCommentResponse> getMyComments(Long userId, Pageable pageable) {
-        return commentRepository.findByAuthorId(userId, pageable)
+        return commentRepository.findByAuthor_IdAndIsDeletedFalse(userId, pageable)
                 .map(comment -> MyCommentResponse.builder()
                         .commentId(comment.getId())
                         .postId(comment.getPost().getId())
