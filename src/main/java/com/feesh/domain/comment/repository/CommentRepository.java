@@ -10,5 +10,5 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPost_IdAndParentIsNullAndIsDeletedFalseOrderByCreatedAtAsc(Long postId);
     List<Comment> findByParent_IdAndIsDeletedFalseOrderByCreatedAtAsc(Long parentId);
-    Page<Comment> findByAuthorId(Long authorId, Pageable pageable);
+    Page<Comment> findByAuthor_IdAndIsDeletedFalse(Long authorId, Pageable pageable);
 }
