@@ -6,7 +6,6 @@ import com.feesh.domain.comment.service.CommentService;
 import com.feesh.global.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
