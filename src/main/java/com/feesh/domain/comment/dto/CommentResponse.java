@@ -1,4 +1,4 @@
-package com.feesh.domain.comment.dto.response;
+package com.feesh.domain.comment.dto;
 
 import com.feesh.domain.comment.entity.Comment;
 import lombok.Getter;
