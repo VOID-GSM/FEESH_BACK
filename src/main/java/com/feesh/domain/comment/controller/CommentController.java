@@ -1,11 +1,12 @@
 package com.feesh.domain.comment.controller;
 
-import com.feesh.domain.comment.dto.request.CommentRequest;
-import com.feesh.domain.comment.dto.response.CommentResponse;
+import com.feesh.domain.comment.dto.CommentRequest;
+import com.feesh.domain.comment.dto.CommentResponse;
 import com.feesh.domain.comment.service.CommentService;
 import com.feesh.global.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
