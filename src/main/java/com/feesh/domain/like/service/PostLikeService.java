@@ -56,14 +56,12 @@ public class PostLikeService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
 
-        // 좋아요 안 했는데 취소하는 경우
-        if (!postLikeRepository.existsByPost_IdAndUser_Id(postId, userId)) {
-            throw new CustomException(ErrorCode.LIKE_NOT_FOUND);
-        }
-
+        // 좋아요 안 했는데 취소하는 경우 및 조회
+        PostLike postLike = postLikeRepository.findByPost_IdAndUser_Id(postId, userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
 
         // 좋아요 삭제
-        postLikeRepository.deleteByPost_IdAndUser_Id(postId, userId);
+        postLikeRepository.delete(postLike);
 
 
         // 게시글 좋아요 수 감소
