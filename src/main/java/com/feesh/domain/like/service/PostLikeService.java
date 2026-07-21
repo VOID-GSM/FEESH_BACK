@@ -33,7 +33,7 @@ public class PostLikeService {
 
 
         // 이미 좋아요 눌렀는지 확인
-        if (postLikeRepository.existsByPost_IdAndUser_Id(postId, userId)) {
+        if (postLikeRepository.existsByPostIdAndUserId(postId, userId)) {
             throw new CustomException(ErrorCode.LIKE_ALREADY_EXISTS);
         }
 
