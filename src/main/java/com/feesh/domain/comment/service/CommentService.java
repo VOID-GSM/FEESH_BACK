@@ -1,7 +1,7 @@
 package com.feesh.domain.comment.service;
 
-import com.feesh.domain.comment.dto.CommentRequest;
-import com.feesh.domain.comment.dto.CommentResponse;
+import com.feesh.domain.comment.dto.request.CommentRequest;
+import com.feesh.domain.comment.dto.response.CommentResponse;
 import com.feesh.domain.comment.entity.Comment;
 import com.feesh.domain.comment.repository.CommentRepository;
 import com.feesh.global.exception.CustomException;
