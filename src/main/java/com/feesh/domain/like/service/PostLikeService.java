@@ -2,6 +2,7 @@ package com.feesh.domain.like.service;
 
 import com.feesh.domain.like.entity.PostLike;
 import com.feesh.domain.like.repository.PostLikeRepository;
+import com.feesh.domain.notification.service.NotificationService;
 import com.feesh.domain.post.entity.Post;
 import com.feesh.domain.post.repository.PostRepository;
 import com.feesh.domain.user.entity.User;
@@ -19,7 +20,7 @@ public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
+    private final NotificationService notificationService;
 
     // 좋아요 추가
     @Transactional
@@ -31,22 +32,25 @@ public class PostLikeService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-
         // 이미 좋아요 눌렀는지 확인
         if (postLikeRepository.existsByPost_IdAndUser_Id(postId, userId)) {
             throw new CustomException(ErrorCode.LIKE_ALREADY_EXISTS);
         }
 
-
         // 좋아요 저장
         PostLike postLike = new PostLike(post, user);
         postLikeRepository.save(postLike);
 
-
         // 게시글 좋아요 수 증가
         post.increaseLikeCount();
-    }
 
+        // 본인 게시글에 본인이 좋아요 누른 경우는 알림 생성 안 함
+        if (!post.getAuthor().getId().equals(userId)) {
+            notificationService.createLikeNotification(
+                    post.getAuthor().getId(), userId, postId
+            );
+        }
+    }
 
     // 좋아요 취소
     @Transactional
@@ -55,14 +59,12 @@ public class PostLikeService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-
         // 좋아요 안 했는데 취소하는 경우 및 조회
         PostLike postLike = postLikeRepository.findByPostIdAndUserId(postId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
 
         // 좋아요 삭제
         postLikeRepository.delete(postLike);
-
 
         // 게시글 좋아요 수 감소
         post.decreaseLikeCount();
