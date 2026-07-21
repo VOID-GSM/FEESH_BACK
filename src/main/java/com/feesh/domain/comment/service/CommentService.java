@@ -4,6 +4,7 @@ import com.feesh.domain.comment.dto.CommentRequest;
 import com.feesh.domain.comment.dto.CommentResponse;
 import com.feesh.domain.comment.entity.Comment;
 import com.feesh.domain.comment.repository.CommentRepository;
+import com.feesh.domain.notification.service.NotificationService;
 import com.feesh.global.exception.CustomException;
 import com.feesh.global.exception.ErrorCode;
 import com.feesh.domain.post.entity.Post;
@@ -13,7 +14,6 @@ import com.feesh.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     // 댓글 작성
     @Transactional
@@ -36,6 +37,13 @@ public class CommentService {
         Comment comment = Comment.createComment(post, author, request.getContent());
         commentRepository.save(comment);
 
+        // 본인 게시글에 본인이 댓글 단 경우는 알림 생성 안 함
+        if (!post.getAuthor().getId().equals(userId)) {
+            notificationService.createCommentNotification(
+                    post.getAuthor().getId(), userId, postId, comment.getId()
+            );
+        }
+
         return new CommentResponse(comment);
     }
 
@@ -44,6 +52,7 @@ public class CommentService {
     public CommentResponse createReply(Long parentId, Long userId, CommentRequest request) {
         Comment parent = commentRepository.findById(parentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PARENT_COMMENT_NOT_FOUND));
+
         if (parent.isDeleted()) {
             throw new CustomException(ErrorCode.PARENT_COMMENT_NOT_FOUND);
         }
@@ -57,6 +66,14 @@ public class CommentService {
         Comment reply = Comment.createReply(parent.getPost(), author, parent, request.getContent());
         commentRepository.save(reply);
 
+        // 원 댓글 작성자 본인이 답글 단 경우는 알림 생성 안 함
+        Long parentAuthorId = parent.getAuthor().getId();
+        if (!parentAuthorId.equals(userId)) {
+            notificationService.createCommentNotification(
+                    parentAuthorId, userId, parent.getPost().getId(), reply.getId()
+            );
+        }
+
         return new CommentResponse(reply);
     }
 
@@ -65,7 +82,6 @@ public class CommentService {
     public List<CommentResponse> getComments(Long postId) {
         List<Comment> comments = commentRepository
                 .findByPost_IdAndParentIsNullAndIsDeletedFalseOrderByCreatedAtAsc(postId);
-
         List<CommentResponse> result = new ArrayList<>();
         for (Comment comment : comments) {
             result.add(new CommentResponse(comment));
@@ -78,7 +94,6 @@ public class CommentService {
     public List<CommentResponse> getReplies(Long parentId) {
         List<Comment> replies = commentRepository
                 .findByParent_IdAndIsDeletedFalseOrderByCreatedAtAsc(parentId);
-
         return replies.stream()
                 .map(CommentResponse::new)
                 .toList();
@@ -89,11 +104,9 @@ public class CommentService {
     public void deleteComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
-
         if (!comment.isOwnedBy(userId)) {
             throw new CustomException(ErrorCode.COMMENT_ACCESS_DENIED);
         }
-
         comment.softDelete();
     }
 }
