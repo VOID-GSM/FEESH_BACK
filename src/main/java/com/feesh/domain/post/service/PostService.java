@@ -1,6 +1,5 @@
 package com.feesh.domain.post.service;
 
-import com.feesh.domain.post.dto.response.PostResponse;
 import com.feesh.global.exception.CustomException;
 import com.feesh.global.exception.ErrorCode;
 import com.feesh.domain.post.dto.request.PostRequest;
@@ -51,15 +50,4 @@ public class PostService {
 
         postRepository.delete(post);
     }
-
-    @Transactional
-    public PostResponse getPostDetail(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-
-        post.increaseViewCount();
-
-        return new PostResponse(post);
-    }
-
 }
