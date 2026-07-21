@@ -36,6 +36,9 @@ public class NotificationService {
     // 댓글 알림 생성
     @Transactional
     public void createCommentNotification(Long receiverId, Long senderId, Long postId, Long commentId) {
+        if (receiverId.equals(senderId)) {
+            return;
+        }
         Notification notification = Notification.builder()
                 .receiverId(receiverId)
                 .senderId(senderId)
@@ -49,6 +52,9 @@ public class NotificationService {
     // 좋아요 알림 생성
     @Transactional
     public void createLikeNotification(Long receiverId, Long senderId, Long postId) {
+        if (receiverId.equals(senderId)) {
+            return;
+        }
         Notification notification = Notification.builder()
                 .receiverId(receiverId)
                 .senderId(senderId)
