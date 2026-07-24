@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/posts", "/posts/**").permitAll()
                 .anyRequest().authenticated()
 )
-                )
+                );
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class
