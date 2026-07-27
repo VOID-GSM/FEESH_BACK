@@ -38,11 +38,15 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User author;
 
+    @Column(nullable = false)
+    private Long price;
+
     @Builder
-    public Post(String title, String content, Category category, User author) {
+    public Post(String title, String content, Category category, Long price, User author) {
         this.title = title;
         this.content = content;
         this.category = category;
+        this.price = price;
         this.author = author;
         this.likeCount = 0;
         this.viewCount = 0;
