@@ -16,5 +16,7 @@ public class PostRequest {
 
     @NotNull(message = "카테고리는 필수 입력 값입니다.")
     private Category category;
-
+    
+    @NotNull(message = "가격은 필수 입력 값입니다.")
+    private Long price;
 }
