@@ -22,8 +22,13 @@ public class MainService {
     private final PostRepository postRepository;
 
     public PostListReponse getPosts(Pageable pageable) {
-        Page<Post> posts = postRepository.findAll(pageable);
-        return toPostListResponse(posts);
+        Page<PostSummaryResponse> posts = postRepository.findPostSummaries(pageable);
+
+        return PostListReponse.builder()
+                .posts(posts.getContent())
+                .totalPages(posts.getTotalPages())
+                .totalElements(posts.getTotalElements())
+                .build();
     }
 
     public PostListReponse getLatestPosts(Pageable pageable) {
