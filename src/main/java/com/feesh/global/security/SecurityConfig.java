@@ -61,7 +61,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/posts",
-                                "/posts/**"
+                                "/posts/**",
+                                "/main/posts",
+                                "/main/posts/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
