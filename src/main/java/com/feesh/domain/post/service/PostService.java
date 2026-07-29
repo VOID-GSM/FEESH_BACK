@@ -1,13 +1,13 @@
 package com.feesh.domain.post.service;
 
-import com.feesh.domain.post.dto.response.PostResponse;
-import com.feesh.global.exception.CustomException;
-import com.feesh.global.exception.ErrorCode;
 import com.feesh.domain.post.dto.request.PostRequest;
+import com.feesh.domain.post.dto.response.PostResponse;
 import com.feesh.domain.post.entity.Post;
 import com.feesh.domain.post.repository.PostRepository;
 import com.feesh.domain.user.entity.User;
 import com.feesh.domain.user.repository.UserRepository;
+import com.feesh.global.exception.CustomException;
+import com.feesh.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public void createPost(Long userId, PostRequest request) {
         User author = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -27,6 +28,7 @@ public class PostService {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .category(request.getCategory())
+                .price(request.getPrice())
                 .author(author)
                 .build();
 
@@ -36,18 +38,20 @@ public class PostService {
     @Transactional
     public void updatePost(Long postId, PostRequest request) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         post.update(
                 request.getTitle(),
                 request.getContent(),
-                request.getCategory()
+                request.getCategory(),
+                request.getPrice()
         );
     }
 
+    @Transactional
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         postRepository.delete(post);
     }
@@ -61,5 +65,4 @@ public class PostService {
 
         return new PostResponse(post);
     }
-
 }
