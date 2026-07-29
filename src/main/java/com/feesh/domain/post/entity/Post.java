@@ -2,7 +2,11 @@ package com.feesh.domain.post.entity;
 
 import com.feesh.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -42,7 +46,13 @@ public class Post {
     private Long price;
 
     @Builder
-    public Post(String title, String content, Category category, Long price, User author) {
+    public Post(
+            String title,
+            String content,
+            Category category,
+            Long price,
+            User author
+    ) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -53,10 +63,16 @@ public class Post {
         this.createdAt = LocalDateTime.now();
     }
 
-    public void update(String title, String content, Category category) {
+    public void update(
+            String title,
+            String content,
+            Category category,
+            Long price
+    ) {
         this.title = title;
         this.content = content;
         this.category = category;
+        this.price = price;
     }
 
     public void increaseLikeCount() {
