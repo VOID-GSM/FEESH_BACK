@@ -14,7 +14,9 @@ import com.feesh.domain.auth.service.AuthService;
 import com.feesh.domain.auth.service.EmailVerificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/auth")
@@ -57,5 +59,13 @@ public class AuthController {
             @Valid @RequestBody VerifyEmailCodeRequest request
     ) {
         return emailVerificationService.verifyCode(request);
+    }
+
+   @DeleteMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(
+            @AuthenticationPrincipal Long userId
+    ) {
+        authService.withdraw(userId);
+        return ResponseEntity.noContent().build();
     }
 }

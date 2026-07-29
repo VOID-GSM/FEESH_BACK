@@ -14,4 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByTitleContaining(String keyword, Pageable pageable);
 
     Page<Post> findByAuthorId(Long authorId, Pageable pageable);
+
+    void deleteAllByAuthor_Id(Long authorId);
 }
