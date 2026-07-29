@@ -38,4 +38,6 @@ out/
 
 
 ### Environment ###
+src/main/resources/application-local.properties
 .env
+application-local.properties

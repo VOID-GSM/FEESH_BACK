@@ -51,8 +51,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.DELETE, "/auth/withdraw").authenticated()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/dev/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",

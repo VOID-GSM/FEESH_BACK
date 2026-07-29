@@ -8,7 +8,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+
     List<Comment> findByPost_IdAndParentIsNullAndIsDeletedFalseOrderByCreatedAtAsc(Long postId);
+
     List<Comment> findByParent_IdAndIsDeletedFalseOrderByCreatedAtAsc(Long parentId);
+
     Page<Comment> findByAuthor_IdAndIsDeletedFalse(Long authorId, Pageable pageable);
+
+    void deleteAllByParentIsNotNullAndPost_Author_Id(Long authorId);
+
+    void deleteAllByParent_Author_Id(Long authorId);
+
+    void deleteAllByPost_Author_Id(Long authorId);
+
+    void deleteAllByAuthor_Id(Long authorId);
 }

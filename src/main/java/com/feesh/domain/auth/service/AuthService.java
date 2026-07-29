@@ -6,6 +6,10 @@ import com.feesh.domain.auth.dto.request.SignupRequest;
 import com.feesh.domain.auth.dto.response.CheckEmailResponse;
 import com.feesh.domain.auth.dto.response.LoginResponse;
 import com.feesh.domain.auth.dto.response.SignupResponse;
+import com.feesh.domain.comment.repository.CommentRepository;
+import com.feesh.domain.like.repository.PostLikeRepository;
+import com.feesh.domain.notification.repository.NotificationRepository;
+import com.feesh.domain.post.repository.PostRepository;
 import com.feesh.domain.user.entity.User;
 import com.feesh.domain.user.repository.UserRepository;
 import com.feesh.global.exception.CustomException;
@@ -26,6 +30,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailVerificationService emailVerificationService;
+    private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final NotificationRepository notificationRepository;
+    private final PostRepository postRepository;
 
     @Transactional
     public SignupResponse signup(SignupRequest request) {
@@ -62,7 +70,8 @@ public class AuthService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new CustomException(ErrorCode.LOGIN_FAILED));
+                        new CustomException(ErrorCode.LOGIN_FAILED)
+                );
 
         if (!passwordEncoder.matches(
                 request.getPassword(),
@@ -96,6 +105,29 @@ public class AuthService {
                 false,
                 "사용 가능한 이메일입니다."
         );
+    }
+
+    @Transactional
+    public void withdraw(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new CustomException(ErrorCode.USER_NOT_FOUND)
+                );
+
+        postLikeRepository.deleteAllByPost_Author_Id(userId);
+        postLikeRepository.deleteAllByUser_Id(userId);
+
+        commentRepository.deleteAllByParentIsNotNullAndPost_Author_Id(userId);
+        commentRepository.deleteAllByParent_Author_Id(userId);
+        commentRepository.deleteAllByPost_Author_Id(userId);
+        commentRepository.deleteAllByAuthor_Id(userId);
+
+        notificationRepository.deleteAllByReceiverId(userId);
+        notificationRepository.deleteAllBySenderId(userId);
+
+        postRepository.deleteAllByAuthor_Id(userId);
+
+        userRepository.delete(user);
     }
 
     private String normalizeEmail(String email) {
