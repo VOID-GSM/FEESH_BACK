@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class PostListReponse {
+public class PostListResponse {
     private List<PostSummaryResponse> posts;
     private int totalPages;
     private long totalElements;

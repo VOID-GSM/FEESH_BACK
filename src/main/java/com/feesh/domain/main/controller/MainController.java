@@ -1,7 +1,7 @@
 package com.feesh.domain.main.controller;
 
 import com.feesh.domain.main.dto.CategoryResponse;
-import com.feesh.domain.main.dto.PostListReponse;
+import com.feesh.domain.main.dto.PostListResponse;
 import com.feesh.domain.main.dto.PostSearchResponse;
 import com.feesh.domain.main.service.MainService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.data.domain.Sort;
+import com.feesh.global.util.SecurityUtil;
 
 @RestController
 @RequestMapping("/main")
@@ -21,19 +22,22 @@ public class MainController {
     private final MainService mainService;
 
     @GetMapping("/posts")
-    public PostListReponse getPosts(
+    public PostListResponse getPosts(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return mainService.getPosts(pageable);
+        Long userId = SecurityUtil.getCurrentUserIdOrNull();
+        return mainService.getPosts(pageable, userId);
     }
 
     @GetMapping("/posts/latest")
-    public PostListReponse getLatestPosts(@PageableDefault Pageable pageable) {
-        return mainService.getLatestPosts(pageable);
+    public PostListResponse getLatestPosts(@PageableDefault Pageable pageable) {
+        Long userId = SecurityUtil.getCurrentUserIdOrNull();
+        return mainService.getLatestPosts(pageable, userId);
     }
 
     @GetMapping("/posts/popular")
-    public PostListReponse getPopularPosts(@PageableDefault Pageable pageable) {
-        return mainService.getPopularPosts(pageable);
+    public PostListResponse getPopularPosts(@PageableDefault Pageable pageable) {
+        Long userId = SecurityUtil.getCurrentUserIdOrNull();
+        return mainService.getPopularPosts(pageable, userId);
     }
 
     @GetMapping("/search")
