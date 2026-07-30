@@ -22,6 +22,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -50,7 +51,15 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, e) -> {
+                            res.setStatus(401);
+                            res.setContentType("application/json;charset=UTF-8");
+                            res.getWriter().write("{\"message\":\"인증이 필요합니다.\"}");
+                        })
+                )
                 .authorizeHttpRequests(auth -> auth
+                        // 기존 규칙 그대로 유지
                         .requestMatchers(HttpMethod.DELETE, "/auth/withdraw").authenticated()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(
