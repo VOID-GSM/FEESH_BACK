@@ -36,9 +36,11 @@ public class PostController {
         return "게시글 삭제 완료";
     }
 
-    @GetMapping("/{postId}") //게시글 조회
-    public PostResponse getPost(@PathVariable Long postId) {
-        return postService.getPostDetail(postId);
+    @GetMapping("/{postId}") // 게시글 조회
+    public PostResponse getPost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal Long userId
+    ) {
+        return postService.getPostDetail(postId, userId);
     }
-
 }
