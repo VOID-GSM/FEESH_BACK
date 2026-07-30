@@ -1,7 +1,7 @@
 package com.feesh.domain.main.service;
 
 import com.feesh.domain.main.dto.CategoryResponse;
-import com.feesh.domain.main.dto.PostListReponse;
+import com.feesh.domain.main.dto.PostListResponse;
 import com.feesh.domain.main.dto.PostSearchResponse;
 import com.feesh.domain.main.dto.PostSummaryResponse;
 import com.feesh.domain.post.entity.Category;
@@ -21,24 +21,31 @@ import java.util.List;
 public class MainService {
     private final PostRepository postRepository;
 
-    public PostListReponse getPosts(Pageable pageable) {
-        Page<PostSummaryResponse> posts = postRepository.findPostSummaries(pageable);
-
-        return PostListReponse.builder()
+    public PostListResponse getPosts(Pageable pageable, Long userId) {
+        Page<PostSummaryResponse> posts = postRepository.findPostSummaries(pageable, userId);
+        return PostListResponse.builder()
                 .posts(posts.getContent())
                 .totalPages(posts.getTotalPages())
                 .totalElements(posts.getTotalElements())
                 .build();
     }
 
-    public PostListReponse getLatestPosts(Pageable pageable) {
-        Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-        return toPostListResponse(posts);
+    public PostListResponse getLatestPosts(Pageable pageable, Long userId) {
+        Page<PostSummaryResponse> posts = postRepository.findLatestPostSummaries(pageable, userId);
+        return PostListResponse.builder()
+                .posts(posts.getContent())
+                .totalPages(posts.getTotalPages())
+                .totalElements(posts.getTotalElements())
+                .build();
     }
 
-    public PostListReponse getPopularPosts(Pageable pageable) {
-        Page<Post> posts = postRepository.findAllByOrderByLikeCountDesc(pageable);
-        return toPostListResponse(posts);
+    public PostListResponse getPopularPosts (Pageable pageable, Long userId){
+        Page<PostSummaryResponse> posts = postRepository.findPopularPostSummaries(pageable, userId);
+        return PostListResponse.builder()
+                .posts(posts.getContent())
+                .totalPages(posts.getTotalPages())
+                .totalElements(posts.getTotalElements())
+                .build();
     }
 
     public List<CategoryResponse> getCategories() {
@@ -67,7 +74,7 @@ public class MainService {
                 .build();
     }
 
-    private PostListReponse toPostListResponse(Page<Post> posts) {
+    private PostListResponse toPostListResponse(Page<Post> posts) {
         List<PostSummaryResponse> summaries = posts.getContent().stream()
                 .map(post -> PostSummaryResponse.builder()
                         .id(post.getId())
@@ -75,7 +82,7 @@ public class MainService {
                         .build())
                 .toList();
 
-        return PostListReponse.builder()
+        return PostListResponse.builder()
                 .posts(summaries)
                 .totalPages(posts.getTotalPages())
                 .totalElements(posts.getTotalElements())

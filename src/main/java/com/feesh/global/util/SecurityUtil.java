@@ -22,4 +22,19 @@ public class SecurityUtil {
 
         throw new CustomException(ErrorCode.USER_NOT_FOUND);
     }
+
+    public static Long getCurrentUserIdOrNull() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof Long) {
+            return (Long) principal;
+        }
+
+        return null;
+    }
 }
