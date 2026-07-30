@@ -46,6 +46,9 @@ public class JwtTokenProvider {
 
             return Long.valueOf(claims.getSubject());
         } catch (Exception e) {
+            System.out.println("JWT 검증 실패");
+            System.out.println("예외 종류: " + e.getClass().getSimpleName());
+            System.out.println("예외 내용: " + e.getMessage());
             return null;
         }
     }
