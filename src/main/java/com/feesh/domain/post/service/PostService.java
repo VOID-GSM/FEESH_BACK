@@ -1,5 +1,6 @@
 package com.feesh.domain.post.service;
 
+import com.feesh.domain.like.repository.PostLikeRepository;
 import com.feesh.domain.post.dto.request.PostRequest;
 import com.feesh.domain.post.dto.response.PostResponse;
 import com.feesh.domain.post.entity.Post;
@@ -18,6 +19,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public void createPost(Long userId, PostRequest request) {
@@ -57,12 +59,15 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse getPostDetail(Long postId) {
+    public PostResponse getPostDetail(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         post.increaseViewCount();
 
-        return new PostResponse(post);
+        boolean liked = (userId != null)
+                && postLikeRepository.existsByPost_IdAndUser_Id(postId, userId);
+
+        return new PostResponse(post, liked);
     }
 }

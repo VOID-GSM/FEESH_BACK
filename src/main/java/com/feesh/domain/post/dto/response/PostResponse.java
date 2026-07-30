@@ -13,19 +13,23 @@ public class PostResponse {
     private String title;
     private String content;
     private Category category;
+    private Long price;
     private String authorNickname;
     private int likeCount;
     private int viewCount;
+    private boolean liked;
     private LocalDateTime createdAt;
 
-    public PostResponse(Post post) {
+    public PostResponse(Post post, boolean liked) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
+        this.price = post.getPrice();
         this.authorNickname = post.getAuthor().getNickname();
         this.likeCount = post.getLikeCount();
         this.viewCount = post.getViewCount();
+        this.liked = liked;
         this.createdAt = post.getCreatedAt();
     }
 }
