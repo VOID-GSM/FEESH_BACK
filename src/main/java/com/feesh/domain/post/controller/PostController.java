@@ -31,8 +31,11 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public String deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public String deletePost(
+        @PathVariable Long postId,
+        @AuthenticationPrincipal Long userId
+    ) {
+        postService.deletePost(postId, userId);
         return "게시글 삭제 완료";
     }
 

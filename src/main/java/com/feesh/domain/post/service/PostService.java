@@ -51,9 +51,13 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+            .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getAuthor().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.POST_ACCESS_DENIED);
+        }
 
         postRepository.delete(post);
     }
