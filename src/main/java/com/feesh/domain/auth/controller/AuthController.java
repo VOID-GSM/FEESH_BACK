@@ -61,6 +61,13 @@ public class AuthController {
         return emailVerificationService.verifyCode(request);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<Long> getMe(
+            @AuthenticationPrincipal Long userId
+    ) {
+        return ResponseEntity.ok(userId);
+    }
+
    @DeleteMapping("/withdraw")
     public ResponseEntity<Void> withdraw(
             @AuthenticationPrincipal Long userId
