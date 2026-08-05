@@ -1,15 +1,12 @@
 package com.feesh.domain.main.dto;
 
 import com.feesh.domain.post.entity.Category;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
-@AllArgsConstructor
 public class PostSummaryResponse {
     private Long id;
     private String title;
@@ -24,6 +21,7 @@ public class PostSummaryResponse {
     private LocalDateTime createdAt;
     private boolean liked;
 
+    @Builder
     public PostSummaryResponse(Long id, String title, Category category, Long price,
                                String content, String authorNickname, String profileImageUrl,
                                int likeCount, Long commentCount, LocalDateTime createdAt, boolean liked, int viewCount) {
