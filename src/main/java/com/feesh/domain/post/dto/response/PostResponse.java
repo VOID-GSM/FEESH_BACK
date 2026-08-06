@@ -16,6 +16,7 @@ public class PostResponse {
     private Long price;
     private Long authorId;
     private String authorNickname;
+    private String profileImageUrl;
     private int likeCount;
     private int viewCount;
     private boolean liked;
@@ -29,6 +30,7 @@ public class PostResponse {
         this.price = post.getPrice();
         this.authorId = post.getAuthor().getId();
         this.authorNickname = post.getAuthor().getNickname();
+        this.profileImageUrl = post.getAuthor().getProfileImageUrl();
         this.likeCount = post.getLikeCount();
         this.viewCount = post.getViewCount();
         this.liked = liked;
