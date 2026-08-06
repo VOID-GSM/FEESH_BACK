@@ -45,19 +45,24 @@ public class Post {
     @Column(nullable = false)
     private Long price;
 
+    @Column
+    private String imageUrl;
+
     @Builder
     public Post(
             String title,
             String content,
             Category category,
             Long price,
-            User author
+            User author,
+            String imageUrl
     ) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.price = price;
         this.author = author;
+        this.imageUrl = imageUrl;
         this.likeCount = 0;
         this.viewCount = 0;
         this.createdAt = LocalDateTime.now();
@@ -67,12 +72,14 @@ public class Post {
             String title,
             String content,
             Category category,
-            Long price
+            Long price,
+            String imageUrl
     ) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public void increaseLikeCount() {

@@ -36,6 +36,7 @@ public class PostService {
                 .category(request.getCategory())
                 .price(request.getPrice())
                 .author(author)
+                .imageUrl(request.getImageUrl())
                 .build();
 
         postRepository.save(post);
@@ -50,7 +51,8 @@ public class PostService {
                 request.getTitle(),
                 request.getContent(),
                 request.getCategory(),
-                request.getPrice()
+                request.getPrice(),
+                request.getImageUrl()
         );
     }
 

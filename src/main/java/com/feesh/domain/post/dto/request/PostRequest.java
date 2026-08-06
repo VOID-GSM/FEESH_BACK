@@ -19,4 +19,6 @@ public class PostRequest {
     
     @NotNull(message = "가격은 필수 입력 값입니다.")
     private Long price;
+
+    private String imageUrl;
 }
