@@ -1,7 +1,6 @@
 package com.feesh.domain.mypage.controller;
 
 import com.feesh.domain.mypage.dto.ImageUploadResponse;
-import com.feesh.domain.mypage.dto.MyCommentResponse;
 import com.feesh.domain.mypage.dto.MyFeedResponse;
 import com.feesh.domain.mypage.service.MyPageService;
 import jakarta.validation.Valid;
@@ -45,14 +44,6 @@ public class MyPageController {
             @PageableDefault(size = 10) Pageable pageable
     ) {
         return myPageService.getMyFeed(userId, pageable);
-    }
-
-    @GetMapping("/comments")
-    public Page<MyCommentResponse> getMyComments(
-            @AuthenticationPrincipal Long userId,
-            @PageableDefault(size = 10) Pageable pageable
-    ) {
-        return myPageService.getMyComments(userId, pageable);
     }
 
     @PostMapping("/logout")
