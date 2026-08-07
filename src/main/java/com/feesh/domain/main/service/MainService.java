@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import java.util.Arrays;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +31,8 @@ public class MainService {
                 .build();
     }
 
-    public PostListResponse getLatestPosts(Pageable pageable, Long userId) {
-        Page<PostSummaryResponse> posts = postRepository.findLatestPostSummaries(pageable, userId);
+    public PostListResponse getLatestPosts(Category category, Pageable pageable, Long userId) {
+        Page<PostSummaryResponse> posts = postRepository.findLatestPostSummaries(category, pageable, userId);
         return PostListResponse.builder()
                 .posts(posts.getContent())
                 .totalPages(posts.getTotalPages())
@@ -39,8 +40,8 @@ public class MainService {
                 .build();
     }
 
-    public PostListResponse getPopularPosts (Pageable pageable, Long userId){
-        Page<PostSummaryResponse> posts = postRepository.findPopularPostSummaries(pageable, userId);
+    public PostListResponse getPopularPosts (Category category, Pageable pageable, Long userId){
+        Page<PostSummaryResponse> posts = postRepository.findPopularPostSummaries(category, pageable, userId);
         return PostListResponse.builder()
                 .posts(posts.getContent())
                 .totalPages(posts.getTotalPages())

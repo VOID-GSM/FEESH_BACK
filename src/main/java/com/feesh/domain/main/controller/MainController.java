@@ -4,6 +4,7 @@ import com.feesh.domain.main.dto.CategoryResponse;
 import com.feesh.domain.main.dto.PostListResponse;
 import com.feesh.domain.main.dto.PostSearchResponse;
 import com.feesh.domain.main.service.MainService;
+import com.feesh.domain.post.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Pageable;
@@ -29,15 +30,19 @@ public class MainController {
     }
 
     @GetMapping("/posts/latest")
-    public PostListResponse getLatestPosts(@PageableDefault Pageable pageable) {
+    public PostListResponse getLatestPosts(
+            @RequestParam(required = false) Category category,
+            @PageableDefault Pageable pageable) {
         Long userId = SecurityUtil.getCurrentUserIdOrNull();
-        return mainService.getLatestPosts(pageable, userId);
+        return mainService.getLatestPosts(category, pageable, userId);
     }
 
     @GetMapping("/posts/popular")
-    public PostListResponse getPopularPosts(@PageableDefault Pageable pageable) {
+    public PostListResponse getPopularPosts(
+            @RequestParam(required = false) Category category,
+            @PageableDefault Pageable pageable) {
         Long userId = SecurityUtil.getCurrentUserIdOrNull();
-        return mainService.getPopularPosts(pageable, userId);
+        return mainService.getPopularPosts(category, pageable, userId);
     }
 
     @GetMapping("/search")
