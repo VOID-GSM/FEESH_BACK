@@ -70,4 +70,8 @@ public class Comment {
     public void softDelete() {
         this.isDeleted = true;
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

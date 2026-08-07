@@ -64,4 +64,24 @@ public class CommentController {
         commentService.deleteComment(replyId, userId);
         return "답글 삭제 성공";
     }
+
+    // 댓글 수정
+    @PatchMapping("/comments/{commentId}")
+    public CommentResponse updateComment(
+            @PathVariable Long commentId,
+            @Valid @RequestBody CommentRequest request
+    ) {
+        Long userId = SecurityUtil.getCurrentUserId();
+        return commentService.updateComment(commentId, userId, request);
+    }
+
+    // 답글 수정
+    @PatchMapping("/replies/{replyId}")
+    public CommentResponse updateReply(
+            @PathVariable Long replyId,
+            @Valid @RequestBody CommentRequest request
+    ) {
+        Long userId = SecurityUtil.getCurrentUserId();
+        return commentService.updateComment(replyId, userId, request);
+    }
 }
