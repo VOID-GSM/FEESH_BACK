@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.feesh.domain.comment.repository.CommentRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
     private final PostViewRepository postViewRepository;
 
     @Transactional
@@ -60,6 +62,11 @@ public class PostService {
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        postViewRepository.deleteAllByPost_Id(postId);
+        postLikeRepository.deleteAllByPost_Id(postId);
+        commentRepository.deleteAllByParentIsNotNullAndPost_Id(postId);
+        commentRepository.deleteAllByPost_Id(postId);
 
         postRepository.delete(post);
     }
