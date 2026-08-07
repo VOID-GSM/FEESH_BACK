@@ -21,6 +21,7 @@ public class PostResponse {
     private int viewCount;
     private boolean liked;
     private LocalDateTime createdAt;
+    private String imageUrl;
 
     public PostResponse(Post post, boolean liked) {
         this.id = post.getId();
@@ -35,5 +36,6 @@ public class PostResponse {
         this.viewCount = post.getViewCount();
         this.liked = liked;
         this.createdAt = post.getCreatedAt();
+        this.imageUrl = post.getImageUrl();
     }
 }
