@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/posts")
@@ -15,12 +16,16 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/post")
+    @PostMapping(
+            value = "/post",
+            consumes = "multipart/form-data"
+    )
     public String createPost(
             @AuthenticationPrincipal Long userId,
-            @Valid @RequestBody PostRequest request
+            @Valid @RequestPart("request") PostRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image
     ) {
-        postService.createPost(userId, request);
+        postService.createPost(userId, request, image);
         return "게시글 작성 완료";
     }
 

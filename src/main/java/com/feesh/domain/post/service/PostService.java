@@ -11,7 +11,9 @@ import com.feesh.domain.user.entity.User;
 import com.feesh.domain.user.repository.UserRepository;
 import com.feesh.global.exception.CustomException;
 import com.feesh.global.exception.ErrorCode;
+import com.feesh.global.file.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +28,18 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final CommentRepository commentRepository;
     private final PostViewRepository postViewRepository;
+    private final FileStorageService fileStorageService;
 
     @Transactional
-    public void createPost(Long userId, PostRequest request) {
+    public void createPost(
+            Long userId,
+            PostRequest request,
+            MultipartFile image
+    ) {
         User author = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        String imageUrl = fileStorageService.save(image);
 
         Post post = Post.builder()
                 .title(request.getTitle())
@@ -38,6 +47,7 @@ public class PostService {
                 .category(request.getCategory())
                 .price(request.getPrice())
                 .author(author)
+                .imageUrl(imageUrl)
                 .build();
 
         postRepository.save(post);
