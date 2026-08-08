@@ -45,7 +45,7 @@ public class Post {
     @Column(nullable = false)
     private Long price;
 
-    @Column
+    @Column(name = "image_url")
     private String imageUrl;
 
     @Builder
