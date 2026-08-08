@@ -109,4 +109,21 @@ public class CommentService {
         }
         comment.softDelete();
     }
+
+    // 댓글/답글 수정
+    @Transactional
+    public CommentResponse updateComment(Long commentId, Long userId, CommentRequest request) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        if (comment.isDeleted()) {
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+        if (!comment.isOwnedBy(userId)) {
+            throw new CustomException(ErrorCode.COMMENT_ACCESS_DENIED);
+        }
+
+        comment.updateContent(request.getContent());
+        return new CommentResponse(comment);
+    }
 }

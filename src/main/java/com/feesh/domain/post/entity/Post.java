@@ -72,12 +72,14 @@ public class Post {
             String title,
             String content,
             Category category,
-            Long price
+            Long price,
+            String imageUrl
     ) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public void increaseLikeCount() {

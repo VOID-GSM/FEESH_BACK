@@ -37,5 +37,6 @@ public class PostResponse {
         this.viewCount = post.getViewCount();
         this.liked = liked;
         this.createdAt = post.getCreatedAt();
+        this.imageUrl = post.getImageUrl();
     }
 }

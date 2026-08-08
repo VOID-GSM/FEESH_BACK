@@ -62,7 +62,8 @@ public class PostService {
                 request.getTitle(),
                 request.getContent(),
                 request.getCategory(),
-                request.getPrice()
+                request.getPrice(),
+                request.getImageUrl()
         );
     }
 

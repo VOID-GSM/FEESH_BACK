@@ -12,6 +12,7 @@ public class CommentResponse {
     private String content;
     private Long authorId;
     private String authorNickname;
+    private String profileImageUrl;
     private LocalDateTime createdAt;
 
     public CommentResponse(Comment comment) {
@@ -19,6 +20,7 @@ public class CommentResponse {
         this.content = comment.getContent();
         this.authorId = comment.getAuthor().getId();
         this.authorNickname = comment.getAuthor().getNickname();
+        this.profileImageUrl = comment.getAuthor().getProfileImageUrl();
         this.createdAt = comment.getCreatedAt();
     }
 }
