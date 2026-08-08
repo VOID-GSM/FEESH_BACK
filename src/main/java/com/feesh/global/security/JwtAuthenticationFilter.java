@@ -31,6 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
 
+        System.out.println("요청 URI: " + request.getRequestURI());
+        System.out.println("Authorization 헤더 존재: " + (authorizationHeader != null));
+
         if (authorizationHeader == null
                 || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -40,6 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authorizationHeader.substring(7);
 
         Long userId = jwtTokenProvider.getUserIdIfValid(token);
+
+        System.out.println("JWT userId: " + userId);
 
         if (userId == null) {
             filterChain.doFilter(request, response);
