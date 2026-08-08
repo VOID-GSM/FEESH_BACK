@@ -1,6 +1,7 @@
 package com.feesh.domain.post.repository;
 
 import com.feesh.domain.main.dto.PostSummaryResponse;
+import com.feesh.domain.post.entity.Category;
 import com.feesh.domain.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,10 +51,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         )
         FROM Post p
         JOIN p.author author
+        WHERE (:category IS NULL OR p.category = :category)
         ORDER BY p.createdAt DESC
         """,
-            countQuery = "SELECT COUNT(p) FROM Post p")
-    Page<PostSummaryResponse> findLatestPostSummaries(Pageable pageable, @Param("userId") Long userId);
+            countQuery = """
+            SELECT COUNT(p) FROM Post p
+            WHERE (:category IS NULL OR p.category = :category)
+            """)
+    Page<PostSummaryResponse> findLatestPostSummaries(
+            @Param("category") Category category,
+            Pageable pageable,
+            @Param("userId") Long userId);
 
     @Query(value = """
         SELECT new com.feesh.domain.main.dto.PostSummaryResponse(
@@ -68,8 +76,15 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         )
         FROM Post p
         JOIN p.author author
+        WHERE (:category IS NULL OR p.category = :category)
         ORDER BY p.likeCount DESC
         """,
-            countQuery = "SELECT COUNT(p) FROM Post p")
-    Page<PostSummaryResponse> findPopularPostSummaries(Pageable pageable, @Param("userId") Long userId);
+            countQuery = """
+            SELECT COUNT(p) FROM Post p
+            WHERE (:category IS NULL OR p.category = :category)
+            """)
+    Page<PostSummaryResponse> findPopularPostSummaries(
+            @Param("category") Category category,
+            Pageable pageable,
+            @Param("userId") Long userId);
 }
