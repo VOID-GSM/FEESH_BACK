@@ -8,6 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/posts")
@@ -15,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostController {
 
     private final PostService postService;
+    private final ObjectMapper objectMapper;
+    private final Validator validator;
 
     @PostMapping(
             value = "/post",
@@ -22,13 +30,26 @@ public class PostController {
     )
     public String createPost(
             @AuthenticationPrincipal Long userId,
-            @Valid @RequestPart("request") PostRequest request,
+            @RequestPart("request") String requestJson,
             @RequestPart(value = "image", required = false) MultipartFile image
-    ) {
+    ) throws JsonProcessingException {
+
+        PostRequest request = objectMapper.readValue(
+                requestJson,
+                PostRequest.class
+        );
+
+        Set<ConstraintViolation<PostRequest>> violations =
+                validator.validate(request);
+
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }   
+
         postService.createPost(userId, request, image);
+
         return "게시글 작성 완료";
     }
-
     @PatchMapping("/{postId}")
     public String updatePost(@PathVariable Long postId, @Valid @RequestBody PostRequest request) {
         postService.updatePost(postId, request);
