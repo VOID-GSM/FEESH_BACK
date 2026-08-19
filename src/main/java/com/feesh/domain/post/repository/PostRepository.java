@@ -11,12 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
-
-    Page<Post> findAllByOrderByLikeCountDesc(Pageable pageable);
-
-    Page<Post> findByTitleContaining(String keyword, Pageable pageable);
-
     Page<Post> findByAuthorId(Long authorId, Pageable pageable);
 
     void deleteAllByAuthor_Id(Long authorId);
@@ -85,6 +79,30 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             """)
     Page<PostSummaryResponse> findPopularPostSummaries(
             @Param("category") Category category,
+            Pageable pageable,
+            @Param("userId") Long userId);
+    @Query(value = """
+    SELECT new com.feesh.domain.main.dto.PostSummaryResponse(
+        p.id, p.title, p.category, p.price, p.content,
+        author.nickname, author.profileImageUrl, p.likeCount,
+        (SELECT COUNT(c) FROM Comment c WHERE c.post = p AND c.isDeleted = false),
+        p.createdAt,
+        CASE WHEN EXISTS (
+             SELECT 1 FROM PostLike pl WHERE pl.post = p AND pl.user.id = :userId
+        ) THEN true ELSE false END,
+        p.viewCount
+    )
+    FROM Post p
+    JOIN p.author author
+    WHERE p.title LIKE CONCAT('%', :keyword, '%')
+    ORDER BY p.createdAt DESC
+    """,
+            countQuery = """
+        SELECT COUNT(p) FROM Post p
+        WHERE p.title LIKE CONCAT('%', :keyword, '%')
+        """)
+    Page<PostSummaryResponse> searchPostSummariesByTitle(
+            @Param("keyword") String keyword,
             Pageable pageable,
             @Param("userId") Long userId);
 }

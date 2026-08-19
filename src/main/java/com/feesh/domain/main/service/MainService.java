@@ -58,33 +58,11 @@ public class MainService {
                 .toList();
     }
 
-    public PostSearchResponse searchPosts(String keyword, Pageable pageable) {
-        Page<Post> posts = postRepository.findByTitleContaining(keyword, pageable);
-
-        List<PostSummaryResponse> summaries = posts.getContent().stream()
-                .map(post -> PostSummaryResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .build())
-                .toList();
+    public PostSearchResponse searchPosts(String keyword, Pageable pageable, Long userId) {
+        Page<PostSummaryResponse> posts = postRepository.searchPostSummariesByTitle(keyword, pageable, userId);
 
         return PostSearchResponse.builder()
-                .posts(summaries)
-                .totalPages(posts.getTotalPages())
-                .totalElements(posts.getTotalElements())
-                .build();
-    }
-
-    private PostListResponse toPostListResponse(Page<Post> posts) {
-        List<PostSummaryResponse> summaries = posts.getContent().stream()
-                .map(post -> PostSummaryResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .build())
-                .toList();
-
-        return PostListResponse.builder()
-                .posts(summaries)
+                .posts(posts.getContent())
                 .totalPages(posts.getTotalPages())
                 .totalElements(posts.getTotalElements())
                 .build();
