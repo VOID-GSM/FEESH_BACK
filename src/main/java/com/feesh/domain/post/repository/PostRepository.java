@@ -81,6 +81,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             @Param("category") Category category,
             Pageable pageable,
             @Param("userId") Long userId);
+
     @Query(value = """
     SELECT new com.feesh.domain.main.dto.PostSummaryResponse(
         p.id, p.title, p.category, p.price, p.content,
@@ -94,15 +95,19 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     )
     FROM Post p
     JOIN p.author author
-    WHERE p.title LIKE CONCAT('%', :keyword, '%')
+    WHERE (:keyword IS NULL OR p.title LIKE CONCAT('%', :keyword, '%') OR author.nickname LIKE CONCAT('%', :keyword, '%'))
+    AND (:category IS NULL OR p.category = :category)
     ORDER BY p.createdAt DESC
     """,
             countQuery = """
-        SELECT COUNT(p) FROM Post p
-        WHERE p.title LIKE CONCAT('%', :keyword, '%')
-        """)
+            SELECT COUNT(p) FROM Post p
+            JOIN p.author author
+            WHERE (:keyword IS NULL OR p.title LIKE CONCAT('%', :keyword, '%') OR author.nickname LIKE CONCAT('%', :keyword, '%'))
+            AND (:category IS NULL OR p.category = :category)
+            """)
     Page<PostSummaryResponse> searchPostSummariesByTitle(
             @Param("keyword") String keyword,
+            @Param("category") Category category,
             Pageable pageable,
             @Param("userId") Long userId);
 }

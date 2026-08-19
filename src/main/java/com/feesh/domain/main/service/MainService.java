@@ -58,8 +58,8 @@ public class MainService {
                 .toList();
     }
 
-    public PostSearchResponse searchPosts(String keyword, Pageable pageable, Long userId) {
-        Page<PostSummaryResponse> posts = postRepository.searchPostSummariesByTitle(keyword, pageable, userId);
+    public PostSearchResponse searchPosts(String keyword, Category category, Pageable pageable, Long userId) {
+        Page<PostSummaryResponse> posts = postRepository.searchPostSummariesByTitle(keyword, category, pageable, userId);
 
         return PostSearchResponse.builder()
                 .posts(posts.getContent())

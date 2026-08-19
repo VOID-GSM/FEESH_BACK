@@ -47,10 +47,11 @@ public class MainController {
 
     @GetMapping("/search")
     public PostSearchResponse search(
-            @RequestParam String keyword,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Category category,
             @PageableDefault Pageable pageable) {
         Long userId = SecurityUtil.getCurrentUserIdOrNull();
-        return mainService.searchPosts(keyword, pageable, userId);
+        return mainService.searchPosts(keyword, category, pageable, userId);
     }
 
     @GetMapping("/categories")
