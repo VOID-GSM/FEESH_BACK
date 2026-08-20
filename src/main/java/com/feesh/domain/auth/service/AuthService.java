@@ -15,10 +15,12 @@ import com.feesh.domain.user.repository.UserRepository;
 import com.feesh.global.exception.CustomException;
 import com.feesh.global.exception.ErrorCode;
 import com.feesh.global.security.JwtTokenProvider;
+import com.feesh.domain.post.repository.PostViewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.Locale;
 
@@ -34,6 +36,7 @@ public class AuthService {
     private final PostLikeRepository postLikeRepository;
     private final NotificationRepository notificationRepository;
     private final PostRepository postRepository;
+    private final PostViewRepository postViewRepository;
 
     @Transactional
     public SignupResponse signup(SignupRequest request) {
@@ -124,6 +127,8 @@ public class AuthService {
 
         notificationRepository.deleteAllByReceiverId(userId);
         notificationRepository.deleteAllBySenderId(userId);
+
+        postViewRepository.deleteAllByPost_Author_Id(userId);
 
         postRepository.deleteAllByAuthor_Id(userId);
 

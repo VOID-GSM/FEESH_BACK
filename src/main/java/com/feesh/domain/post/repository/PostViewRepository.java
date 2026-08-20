@@ -8,4 +8,6 @@ public interface PostViewRepository extends JpaRepository<PostView, Long> {
     boolean existsByPost_IdAndUser_Id(Long postId, Long userId);
 
     void deleteAllByPost_Id(Long postId);
+
+    void deleteAllByPost_Author_Id(Long userId);
 }
