@@ -10,4 +10,6 @@ public interface PostViewRepository extends JpaRepository<PostView, Long> {
     void deleteAllByPost_Id(Long postId);
 
     void deleteAllByPost_Author_Id(Long userId);
+
+    void deleteAllByUser_Id(Long userId);
 }
