@@ -27,18 +27,36 @@ public class NotificationService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
+    @Transactional
     public List<NotificationResponseDto> getCommentAlarms(Long userId) {
         List<Notification> notifications = notificationRepository
                 .findByReceiverIdAndTypeOrderByCreatedAtDesc(userId, NotificationType.COMMENT);
 
+        markAsRead(notifications);
+
         return toResponseDtos(notifications);
     }
 
+    @Transactional
     public List<NotificationResponseDto> getLikeAlarms(Long userId) {
         List<Notification> notifications = notificationRepository
                 .findByReceiverIdAndTypeOrderByCreatedAtDesc(userId, NotificationType.LIKE);
 
+        markAsRead(notifications);
+
         return toResponseDtos(notifications);
+    }
+
+    // 헤더에 표시할 안 읽은 알림 개수
+    public long getUnreadCount(Long userId) {
+        return notificationRepository.countByReceiverIdAndIsReadFalse(userId);
+    }
+
+    // 조회한 알림들 읽음 처리 (더티체킹으로 자동 반영)
+    private void markAsRead(List<Notification> notifications) {
+        notifications.stream()
+                .filter(notification -> !notification.isRead())
+                .forEach(Notification::markAsRead);
     }
 
     // 알림 목록의 senderId, commentId를 모아 각각 한 번에 조회한 뒤 DTO로 변환 (N+1 방지)
