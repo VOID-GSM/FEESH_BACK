@@ -129,6 +129,7 @@ public class AuthService {
         notificationRepository.deleteAllBySenderId(userId);
 
         postViewRepository.deleteAllByPost_Author_Id(userId);
+        postViewRepository.deleteAllByUser_Id(userId);
 
         postRepository.deleteAllByAuthor_Id(userId);
 
