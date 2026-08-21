@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/alarm")
@@ -28,5 +29,12 @@ public class NotificationController {
     public ResponseEntity<List<NotificationResponseDto>> getLikeAlarms() {
         Long userId = SecurityUtil.getCurrentUserId();
         return ResponseEntity.ok(notificationService.getLikeAlarms(userId));
+    }
+
+    @GetMapping("/unread-count")
+    public ResponseEntity<Map<String, Long>> getUnreadCount() {
+        Long userId = SecurityUtil.getCurrentUserId();
+        long count = notificationService.getUnreadCount(userId);
+        return ResponseEntity.ok(Map.of("unreadCount", count));
     }
 }
